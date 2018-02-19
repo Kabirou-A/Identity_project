@@ -14,12 +14,22 @@ import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.exceptions.IdentityUpdateException;
 
 /**
- * <h3>Description</h3>
- * <p>This class allows to ...</p>
+ * <h3>interface IdentityDAO</h3>
+ * <p>This class allows to describe different behavior to manage the Identity object.</p>
  *
- * <h3>Usage</h3>
+ * <h3>Usage of IdentityDAO</h3>
  * <p>This class should be used as follows:
- *   <pre><code>${type_name} instance = new ${type_name}();</code></pre>
+ *  Define create method 
+ *   <pre><code>$void create(Identity identity);</code></pre>
+ *  Define search method
+ *  <pre><code>$void search(Identity identity);</code></pre>
+ *  Define update method
+ *  <pre><code>$void update(Identity identity);</code></pre>
+ *  Define delete method
+ *  <pre><code>$void delete(Identity identity);</code></pre>
+ *  Define select method
+ *  <pre><code>$void select(Identity identity);</code></pre>
+ *  Define an Integer with unique value for the all program and initiate it to zero ;
  * </p>
  *
  * @since $${version}
@@ -39,5 +49,9 @@ public interface IdentityDAO {
 	public void update(Identity identity)throws IdentityUpdateException;
 
 	public void delete(Identity identity) throws IdentityDeleteException;
+	
+	
+
+	
 
 }

@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.IdentityCreationException;
 import fr.epita.iam.exceptions.IdentityDeleteException;
@@ -20,17 +19,43 @@ import fr.epita.iam.exceptions.IdentityUpdateException;
 import fr.epita.logger.Logger;
 
 /**
- * <h3>Description</h3>
+ * <h3>class IdendityJDBCDAO </h3>
  * <p>
- * This class allows to ...
+ * This class allows to implement all methods of the interface IdentityDAO ...
  * </p>
  *
- * <h3>Usage</h3>
+ * <h3>Usage of IdentityDDBCDAO</h3>
  * <p>
  * This class should be used as follows:
- *
- * <pre>
- * <code>${type_name} instance = new ${type_name}();</code>
+ * to create new record in IDENTIES table
+ * * <pre>
+ * <code> IdentityDDBCDAO daoInstance = new IdentityDDBCDAO();
+ *         daoInstance.create(identity_Instance);
+ * </code>
+ * </pre>
+ * to read all records of IDENTIES table
+ * * <pre>
+ * <code> IdentityDDBCDAO daoInstance = new IdentityDDBCDAO();
+ *         daoInstance.select(identity_Instance);
+ * </code>
+ * </pre>
+ * * to search for any field of IDENTIES table
+ * * <pre>
+ * <code> IdentityDDBCDAO daoInstance = new IdentityDDBCDAO();
+ *         daoInstance.search(identity_Instance);
+ * </code>
+ * </pre>
+ * * to update one or many fields of IDENTIES table
+ * * <pre>
+ * <code> IdentityDDBCDAO daoInstance = new IdentityDDBCDAO();
+ *         daoInstance.update(identity_Instance);
+ * </code>
+ * </pre>
+ * * to delete one or many fields of IDENTIES table
+ * * <pre>
+ * <code> IdentityDDBCDAO daoInstance = new IdentityDDBCDAO();
+ *         daoInstance.delete(identity_Instance);
+ * </code>
  * </pre>
  * </p>
  *
@@ -63,12 +88,22 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		try {
 			String insertIdentity = "INSERT INTO IDENTITIES(UID, EMAIL, DISPLAY_NAME) VALUES (?, ?, ?)";
 			if (insertIdentity!=null) {
+				
 				connection=getConnection();
+				
 			final PreparedStatement pstmt = connection.prepareStatement(insertIdentity);
-			pstmt.setString(1, identity.getUid());
-			pstmt.setString(2, identity.getEmail());
-			pstmt.setString(3, identity.getDisplayName());
-			pstmt.execute();
+				if(identity.getUid() != null && identity.getEmail()!= null && identity.getDisplayName()!= null) {
+					pstmt.setString(1, identity.getUid());
+					pstmt.setString(2, identity.getEmail());
+					pstmt.setString(3, identity.getDisplayName());
+					pstmt.execute();
+					System.out.println(" new Identity with " + identity.getUid() + " User number was successfull created ");
+				}
+				else {
+					System.out.println(" Please provide states of your new Identity");
+				}
+					
+			
 			}
 			
 		} 
@@ -97,6 +132,12 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	public List<Identity> search(Identity criteria) throws IdentitySearchException {
 
 		final List<Identity> results = new ArrayList<>();
+		
+		final Identity currentIdentity = new Identity();
+		// boolean is true will confirm that the Identity search is in the database.
+		// A mean to insure that search method iterate all the field in IDENTITIES table
+		boolean num = false;
+		
 		Connection connection = null;
 		try {
 			connection = getConnection();
@@ -114,13 +155,21 @@ public class IdentityJDBCDAO implements IdentityDAO {
 			preparedStatement.setString(6, criteria.getUid());
 			final ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				final Identity currentIdentity = new Identity();
+				
 				// How to select the right index?
 				currentIdentity.setDisplayName(rs.getString("DISPLAY_NAME"));
 				currentIdentity.setEmail(rs.getString("EMAIL"));
 				currentIdentity.setUid(rs.getString("UID"));
 
-				results.add(currentIdentity);
+				num = results.add(currentIdentity);
+				
+				
+			}
+			if (num == true) {
+				System.out.println(" the table contain the person you are looking for!!!");
+			}
+			else {
+				System.out.println(" the Identity you are looking for is not in the table!!!");
 			}
 			rs.close();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -136,6 +185,8 @@ public class IdentityJDBCDAO implements IdentityDAO {
 
 		return results;
 	}
+	
+					
 
 	/*
 	 * (non-Javadoc)
@@ -144,30 +195,36 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	@Override
 	public void update(Identity identity) throws IdentityUpdateException{
 		Connection connection = null;
+		
 		String sqlUpdate = "UPDATE IDENTITIES SET EMAIL=?, DISPLAY_NAME=? WHERE UID = ?";
+		
 		final PreparedStatement pstmt;
 		
 		try {
-				connection = getConnection();
+			connection = getConnection();
 				if (sqlUpdate!=null) {
-				pstmt = connection.prepareStatement(sqlUpdate);
-				pstmt.setString(1, identity.getEmail());
-				pstmt.setString(2, identity.getDisplayName());
-				pstmt.setString(3, identity.getUid());
-				
-				// execute update SQL statement
-				pstmt.executeUpdate();
-				
+					pstmt = connection.prepareStatement(sqlUpdate);
+					pstmt.setString(1, identity.getEmail());
+					pstmt.setString(2, identity.getDisplayName());
+					pstmt.setString(3, identity.getUid());
+					
+					// execute update SQL statement
+					int rowUpdate = pstmt.executeUpdate();
+					if (rowUpdate > 0) {
+						
+						System.out.println("Record is updated to IDENTITIES table!");
+					}
+					else {
+						
+					}
 				}
-				
-				
-
-		System.out.println("Record is updated to IDENTITIES table!");
-		} 
+		}
 		catch (final Exception e) {
 	 		// TODO: handle exception
-			LOGGER.error("error while creating the identity " + identity + "got that error " + e.getMessage());
+			LOGGER.error("error while updating the identity " + identity + "got that error " + e.getMessage());
+			
 			e.printStackTrace();
+			
 			throw new IdentityUpdateException(e, identity);
 
 		} 
@@ -189,26 +246,37 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	 */
 	@Override
 	public void delete(Identity identity) throws IdentityDeleteException{
+		
 		LOGGER.info("delete a row from IDENTITY table" + identity);
+		
 		Connection connection = null;
 		try {
 				connection = getConnection();
 			
 				final PreparedStatement pstmt; 
-			
+				int numberIdentityDelete;
 				String deleteIdentity = "DELETE FROM IDENTITIES WHERE UID = ?";
 				
 				//test and see
 			
 				pstmt = connection.prepareStatement(deleteIdentity);
 			
-				pstmt.setString(1, identity.getUid());
-
-				// execute delete SQL statement
-				pstmt.executeUpdate();
-			
+				 pstmt.setString(1, identity.getUid());
+				 
+				// execute delete SQL statement and store the number of row delete in numberIdentityDelete integer
+				 numberIdentityDelete = pstmt.executeUpdate();
+				 
+								 
 				// we will try to print to GUI the following message
-				System.out.println("Record is deleted!");
+				 if(numberIdentityDelete == 0) {
+					 System.out.println("There is no record with User Identity number " + identity.getUid() + " in IDENTITY table  ");
+				 }
+				 else {
+					 System.out.println(numberIdentityDelete + " rows deleted from the IDENTTITIES table!");
+				 }
+			
+				
+				
 			
 		} 
 		catch (final Exception e) {
@@ -228,7 +296,6 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		}
 
 	}
-
 	
 	private static Connection getConnection() throws ClassNotFoundException, SQLException {
 		final String url = "jdbc:derby://localhost:1527/IDENTITIES_DB;create=true";
@@ -240,6 +307,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		final Connection connection = DriverManager.getConnection(url, username, password);
 		return connection;
 	}
+
 	
 	/*
 	 * private static Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -259,10 +327,5 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	}
 	*/
 	
-	public Identity getIdentity(String UId) {
-		Identity id = new Identity();
-		
-		return id;
-	}
 
 }

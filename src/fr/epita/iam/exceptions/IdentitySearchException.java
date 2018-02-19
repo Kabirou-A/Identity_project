@@ -8,14 +8,14 @@ package fr.epita.iam.exceptions;
 import fr.epita.iam.datamodel.Identity;
 
 /**
- * <h3>Description</h3>
- * <p>This class allows to ...</p>
+
+ * <h3>class IdentitySearchException</h3>
+ * <p>This class allows to inherit all the properties and methods of IdentityDataException class...</p>
  *
- * <h3>Usage</h3>
+ * <h3>Usage of IdentitySearchException</h3>
  * <p>This class should be used as follows:
- *   <pre><code>${type_name} instance = new ${type_name}();</code></pre>
- * </p>
- *
+ * handle any exception that occur while search  an Identity
+ * Notify the user that of an unsuccessful of search query  
  * @since $${version}
  * @see See also $${link}
  * @author ${user}
