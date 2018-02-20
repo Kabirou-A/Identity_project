@@ -10,12 +10,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 //import java.util.ArrayList;
 //import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
+import fr.epita.iam.datamodel.Address;
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.AddressCreationException;
 //import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.IdentityCreationException;
 import fr.epita.iam.exceptions.IdentityDeleteException;
+import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.exceptions.IdentityUpdateException;
+import fr.epita.iam.services.dao.AddressDAO;
+import fr.epita.iam.services.dao.AddressJDBCDAO;
 //import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.services.dao.IdentityDAO;
 import fr.epita.iam.services.dao.IdentityJDBCDAO;
@@ -57,22 +64,45 @@ public class TestDB {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IdentityCreationException
+	 * @throws IdentityDeleteException 
+	 * @throws IdentitySearchException 
 	 */
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, IdentityCreationException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, IdentityCreationException, IdentityDeleteException {
 		
 		// given
+		Address address1 = new Address("ADDRESSNAME", "OCCUPATION", "STREETNAME", "STATEAREADISTRICT", "CITYTOWNVILLAGE", "PROVINCE", "POSTALCODE", "COUNTRY");
+		final AddressDAO aDAO = new AddressJDBCDAO();
+		
+		try {
+			aDAO.searchAddress(address1);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 			   Identity identity1 = new Identity("99911", "sjunior@gmail.com", "junior");
 				
 				final IdentityDAO dao = new IdentityJDBCDAO();
 				
+				 Identity searchIdentity = new Identity("5010", "ssodiq@gmail.com", "Akambi");
+				 dao.create(searchIdentity);
+				 //dao.create(new Identity("40110", "ssodiq@gmail.com", "Akambi"));
+				 
+				Identity iddelete1 = new Identity();
+				//iddelete.setUid("4011200");
 				
-				dao.create(new Identity("401", "sodiq@gmail.com", "Akambi"));
+				//identity1.setDisplayName("waleUpdate");
+				//identity1.setEmail("adebowaledocallprog");
+				 identity1.setUid("401");
+				 //dao.create(iddelete1);
 				
-				
-				identity1.setDisplayName("waleUpdate");
-				identity1.setEmail("adebowaledocallprog");
-				identity1.setUid("401410");
-				
+				 try {
+					dao.search(searchIdentity);
+				} catch (IdentitySearchException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 
+
 				
 
 				
@@ -208,5 +238,8 @@ public class TestDB {
 		final Connection connection = DriverManager.getConnection(url, username, password);
 		return connection;
 	}
+	
+	
+	
 	
 }

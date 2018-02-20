@@ -22,7 +22,7 @@ public class IdentityUpdateException extends IdentityDataException {
 
 	@Override
 	public String getMessage() {
-		return "A problem occurred while creating that Identity : " + faultyIdentity;
+		return "A problem occurred while update that Identity : " + faultyIdentity;
 	}
 
 }

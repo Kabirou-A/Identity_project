@@ -50,8 +50,4 @@ public interface IdentityDAO {
 
 	public void delete(Identity identity) throws IdentityDeleteException;
 	
-	
-
-	
-
 }

@@ -173,7 +173,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 			}
 			rs.close();
 		} catch (ClassNotFoundException | SQLException e) {
-			//LOGGER.error("error while performing search", e);
+			LOGGER.error("error while performing search", e);
 			throw new IdentitySearchException(e, criteria);
 		} finally {
 			try {
@@ -294,7 +294,6 @@ public class IdentityJDBCDAO implements IdentityDAO {
 				}
 			}
 		}
-
 	}
 	
 	private static Connection getConnection() throws ClassNotFoundException, SQLException {

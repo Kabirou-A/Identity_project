@@ -5,6 +5,8 @@
  */
 package fr.epita.iam.datamodel;
 
+import java.util.List;
+
 /**
  * <h3>Class IDENTITY</p>
  * <p>This class allow to create one or many users and store they identities details such name, email, 
@@ -41,6 +43,7 @@ public class Identity {
 	private String displayName;
 	private String uid;
 	private String email;
+	private List<Address> address;
 
 	/**
 	 * First constructor with default parameter
@@ -121,12 +124,29 @@ public class Identity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	/**
+	 * @return the address
+	 */
+	public List<Address> getAddress() {
+		return address;
+	}
+
+
+
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(List<Address> address) {
+		this.address = address;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Identity [uid=" + uid + ", email=" + email + ", displayName=" + displayName + "]";
+		return "Identity [uid=" + uid + ", email=" + email 
+				+ ", displayName=" + displayName + ", address=" + address + "]";
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -178,6 +198,10 @@ public class Identity {
 		}
 		return true;
 	}
+
+
+
+	
 
 
 
