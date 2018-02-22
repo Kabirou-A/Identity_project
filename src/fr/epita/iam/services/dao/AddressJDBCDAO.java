@@ -20,6 +20,7 @@ import fr.epita.iam.exceptions.AddressUpdateException;
 import fr.epita.iam.exceptions.IdentityDeleteException;
 import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.exceptions.IdentityUpdateException;
+import fr.epita.iam.services.IdentityConnection;
 import fr.epita.logger.Logger;
 
 /**
@@ -40,14 +41,11 @@ public class AddressJDBCDAO implements AddressDAO{
 			String insertaddress = "INSERT INTO ADDRESS(ADDRESSNAME, OCCUPATION, STREETNAME, STATEAREADISTRICT, CITYTOWNVILLAGE, PROVINCE, POSTALCODE, COUNTRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			if (insertaddress!=null) {
 				
-				connection=getConnection();
+				connection = IdentityConnection.getConnection();
 				
 			final PreparedStatement pstmt = connection.prepareStatement(insertaddress);
 			//make sure that all attribute of address instance are set to avoid null value in the database...
-				if(address.getAddressName() != null && address.getOccupation()!= null 
-						&& address.getStreetName()!= null && address.getStateAreaDistrict()!= null
-						&& address.getCityTownVillage()!= null && address.getProvince()!= null
-						&& address.getPostalCode()!= null && address.getCountry()!= null) {
+				if(connection != null) {
 					
 					pstmt.setString(1, address.getAddressName());
 					pstmt.setString(2, address.getOccupation());
@@ -61,9 +59,9 @@ public class AddressJDBCDAO implements AddressDAO{
 					pstmt.execute();
 					System.out.println(" new address with " + address.getAddressName() + " Address  was successfull created ");
 				}
-				else {
+				/*else {
 					System.out.println(" Please provide states of your new address");
-				}
+				}*/
 					
 			
 			}
@@ -99,7 +97,7 @@ public class AddressJDBCDAO implements AddressDAO{
 		
 		Connection connection = null;
 		try {
-			connection = getConnection();
+			connection = IdentityConnection.getConnection();
 			final String sqlSearchAddress = "SELECT ADDRESSNAME, OCCUPATION, STREETNAME, "
 					+ "STATEAREADISTRICT, CITYTOWNVILLAGE, PROVINCE, POSTALCODE, "
 					+ "COUNTRY FROM ADDRESS " 
@@ -190,7 +188,7 @@ public class AddressJDBCDAO implements AddressDAO{
 		final PreparedStatement pstmt;
 		
 		try {
-			connection = getConnection();
+			connection = IdentityConnection.getConnection();
 				if (sqlUpdateAddress!=null) {
 					pstmt = connection.prepareStatement(sqlUpdateAddress);
 					
@@ -242,19 +240,17 @@ public class AddressJDBCDAO implements AddressDAO{
 		
 		Connection connection = null;
 		try {
-				connection = getConnection();
+				connection = IdentityConnection.getConnection();
 			
 				final PreparedStatement pstmt;
 				
 				int numberOfAddressDelete;
 				
 				String deleteAddress = "DELETE FROM ADDRESS WHERE ADDRESSNAME = ?";
-				
-				//test and see
-			
+											
 				pstmt = connection.prepareStatement(deleteAddress);
 			
-				 pstmt.setString(1, address.getAddressName());
+				pstmt.setString(1, address.getAddressName());
 				 
 				// execute delete SQL statement and store the number of row delete in numberOfAddressDelete integer
 				 numberOfAddressDelete = pstmt.executeUpdate();
@@ -287,21 +283,5 @@ public class AddressJDBCDAO implements AddressDAO{
 				}
 			}
 		}
-		
 	}
-	
-	
-	
-	
-	private static Connection getConnection() throws ClassNotFoundException, SQLException {
-		final String url = "jdbc:derby://localhost:1527/IDENTITIES_DB;create=true";
-		final String password = "root";
-		final String username = "root";
-
-		Class.forName("org.apache.derby.jdbc.ClientDriver");
-
-		final Connection connection = DriverManager.getConnection(url, username, password);
-		return connection;
-	}
-
 }

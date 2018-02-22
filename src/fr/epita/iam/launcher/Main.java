@@ -4,8 +4,20 @@
  */
 package fr.epita.iam.launcher;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+
+import fr.epita.iam.datamodel.Address;
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.AddressCreationException;
 import fr.epita.iam.exceptions.IdentityCreationException;
+import fr.epita.iam.exceptions.UserLoginSearchException;
+import fr.epita.iam.services.ConnectionService;
+import fr.epita.iam.services.VerifyUserLogin;
+import fr.epita.iam.services.configuration.ConfigurationService;
+import fr.epita.iam.services.dao.AddressJDBCDAO;
 import fr.epita.iam.services.dao.IdentityJDBCDAO;
 
 /**
@@ -57,28 +69,23 @@ public class Main {
 	 *         ${tags}
 	 */
 	public static void main(String[] args) {
+		final ConnectionService connect = null;
 		final String confFileLocation = args[0];
 		if (confFileLocation == null || confFileLocation.isEmpty()) {
 			// no configuration, trying default
 			System.out.println("no configuration file argument");
-		} else {
-
-			// TODO load the configuration thanks to the configuration service
-
+		} 
+		else {
+			connect.initializedConnectionServices();
+			System.out.println("connection is available on request!!!");
 		}
-
-		final Identity id1 = new Identity();
-		final IdentityJDBCDAO db = new IdentityJDBCDAO();
-		id1.setEmail("karinloye@gmail.com");
-		id1.setUid("7700");
-		id1.setDisplayName("Kabirou Arinloye");
+		VerifyUserLogin verifyUser = new VerifyUserLogin();
 		try {
-			db.create(id1);
-		} catch (IdentityCreationException e) {
+			verifyUser.userCredential();
+		} catch (UserLoginSearchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(id1);
 	}
 
 }

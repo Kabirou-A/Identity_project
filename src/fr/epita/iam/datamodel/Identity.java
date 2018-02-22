@@ -38,7 +38,8 @@ import java.util.List;
 	 * 
 	 * 
 	 */
-public class Identity {
+public class Identity extends Person{
+	
 
 	private String displayName;
 	private String uid;

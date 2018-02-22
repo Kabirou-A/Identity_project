@@ -39,7 +39,7 @@ public class ConfigurationService {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-	}
+	} 
 
 	public static ConfigurationService getInstance() {
 		if (instance == null) {

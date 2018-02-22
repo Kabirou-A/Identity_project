@@ -15,6 +15,7 @@ import fr.epita.iam.exceptions.IdentityCreationException;
 import fr.epita.iam.exceptions.IdentityDeleteException;
 import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.exceptions.IdentityUpdateException;
+import fr.epita.iam.services.IdentityConnection;
 //import fr.epita.iam.services.configuration.ConfigurationService;
 import fr.epita.logger.Logger;
 
@@ -69,13 +70,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 
 
 	private static final Logger LOGGER = new Logger(IdentityJDBCDAO.class);
-	/**
-	 *
-	 */
-	private static final String DB_HOST = "db.host";
-	private static final String DB_PWD = "db.pwd";
-	private static final String DB_USER = "db.user";
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see fr.epita.iam.services.dao.IdentityDAO#create(fr.epita.iam.datamodel.Identity)
@@ -89,7 +84,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 			String insertIdentity = "INSERT INTO IDENTITIES(UID, EMAIL, DISPLAY_NAME) VALUES (?, ?, ?)";
 			if (insertIdentity!=null) {
 				
-				connection=getConnection();
+				connection = IdentityConnection.getConnection();
 				
 			final PreparedStatement pstmt = connection.prepareStatement(insertIdentity);
 				if(identity.getUid() != null && identity.getEmail()!= null && identity.getDisplayName()!= null) {
@@ -102,16 +97,12 @@ public class IdentityJDBCDAO implements IdentityDAO {
 				else {
 					System.out.println(" Please provide states of your new Identity");
 				}
-					
-			
 			}
-			
 		} 
 		catch (final Exception e) {
 	 		// TODO: handle exception
 			LOGGER.error("error while creating the identity " + identity + "got that error " + e.getMessage());
 			throw new IdentityCreationException(e, identity);
-			
 		} 
 		finally {
 			if (connection != null) {
@@ -140,7 +131,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		
 		Connection connection = null;
 		try {
-			connection = getConnection();
+			connection = IdentityConnection.getConnection();
 			final String sqlString = "SELECT DISPLAY_NAME, EMAIL, UID FROM IDENTITIES " 
 					+ "WHERE (? IS NULL OR DISPLAY_NAME LIKE ?) "
 					+ "AND (? IS NULL OR EMAIL LIKE ?) " + "AND (? IS NULL OR UID = ?)";
@@ -162,8 +153,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 				currentIdentity.setUid(rs.getString("UID"));
 
 				num = results.add(currentIdentity);
-				
-				
+						
 			}
 			if (num == true) {
 				System.out.println(" the table contain the person you are looking for!!!");
@@ -201,7 +191,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		final PreparedStatement pstmt;
 		
 		try {
-			connection = getConnection();
+			connection = IdentityConnection.getConnection();
 				if (sqlUpdate!=null) {
 					pstmt = connection.prepareStatement(sqlUpdate);
 					pstmt.setString(1, identity.getEmail());
@@ -226,18 +216,16 @@ public class IdentityJDBCDAO implements IdentityDAO {
 			e.printStackTrace();
 			
 			throw new IdentityUpdateException(e, identity);
-
 		} 
 		finally {
 			if (connection != null) {
 				try {
 					connection.close();
 				} catch (final SQLException e) {
-					// can do nothing here, except logging maybe?
+					
 				}
 			}
 		}
-
 	}
 
 	/*
@@ -251,7 +239,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		
 		Connection connection = null;
 		try {
-				connection = getConnection();
+				connection = IdentityConnection.getConnection();
 			
 				final PreparedStatement pstmt; 
 				int numberIdentityDelete;
@@ -274,10 +262,6 @@ public class IdentityJDBCDAO implements IdentityDAO {
 				 else {
 					 System.out.println(numberIdentityDelete + " rows deleted from the IDENTTITIES table!");
 				 }
-			
-				
-				
-			
 		} 
 		catch (final Exception e) {
 				// TODO: handle exception
@@ -290,41 +274,10 @@ public class IdentityJDBCDAO implements IdentityDAO {
 				try {
 					connection.close();
 				} catch (final SQLException e) {
-					// can do nothing here, except logging maybe?
+				
 				}
 			}
 		}
 	}
-	
-	private static Connection getConnection() throws ClassNotFoundException, SQLException {
-		final String url = "jdbc:derby://localhost:1527/IDENTITIES_DB;create=true";
-		final String password = "root";
-		final String username = "root";
-
-		Class.forName("org.apache.derby.jdbc.ClientDriver");
-
-		final Connection connection = DriverManager.getConnection(url, username, password);
-		return connection;
-	}
-
-	
-	/*
-	 * private static Connection getConnection() throws ClassNotFoundException, SQLException {
-	 
-		// TODO make this variable through configuration
-
-		final ConfigurationService confService = ConfigurationService.getInstance();
-
-		final String url = confService.getConfigurationValue(DB_HOST);
-		final String password = confService.getConfigurationValue(DB_PWD);
-		final String username = confService.getConfigurationValue(DB_USER);
-
-		Class.forName("org.apache.derby.jdbc.ClientDriver");
-
-		final Connection connection = DriverManager.getConnection(url, username, password);
-		return connection;
-	}
-	*/
-	
-
+		
 }
