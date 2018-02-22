@@ -8,7 +8,7 @@ import fr.epita.iam.datamodel.UserLogin;
 
 /**
  * @author ADEBOWALE
- *
+ * UserLoginCreationException class will hand all exception while create login credentials 
  */
 public class UserLoginCreationException extends UserLoginDataException {
 

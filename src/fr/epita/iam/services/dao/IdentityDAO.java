@@ -20,7 +20,7 @@ import fr.epita.iam.exceptions.IdentityUpdateException;
  * <h3>Usage of IdentityDAO</h3>
  * <p>This class should be used as follows:
  *  Define create method 
- *   <pre><code>$void create(Identity identity);</code></pre>
+ *  <pre><code>$void create(Identity identity);</code></pre>
  *  Define search method
  *  <pre><code>$void search(Identity identity);</code></pre>
  *  Define update method
@@ -29,14 +29,9 @@ import fr.epita.iam.exceptions.IdentityUpdateException;
  *  <pre><code>$void delete(Identity identity);</code></pre>
  *  Define select method
  *  <pre><code>$void select(Identity identity);</code></pre>
- *  Define an Integer with unique value for the all program and initiate it to zero ;
- * </p>
- *
- * @since $${version}
- * @see See also $${link}
- * @author ${user}
- *
- * ${tags}
+ *  Define an Integer with unique value for the all program and initiate it to zero ;</p>
+ * @since 2018/02/22 version1.1
+ * @author ADEBOWALE
  */
 public interface IdentityDAO {
 

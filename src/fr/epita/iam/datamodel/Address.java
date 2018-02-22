@@ -161,6 +161,77 @@ public class Address {
 				+ ", country= " + country 
 				+"]";
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((addressName == null) ? 0 : addressName.hashCode());
+		result = prime * result + ((cityTownVillage == null) ? 0 : cityTownVillage.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((occupation == null) ? 0 : occupation.hashCode());
+		result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
+		result = prime * result + ((province == null) ? 0 : province.hashCode());
+		result = prime * result + ((stateAreaDistrict == null) ? 0 : stateAreaDistrict.hashCode());
+		result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (addressName == null) {
+			if (other.addressName != null)
+				return false;
+		} else if (!addressName.equals(other.addressName))
+			return false;
+		if (cityTownVillage == null) {
+			if (other.cityTownVillage != null)
+				return false;
+		} else if (!cityTownVillage.equals(other.cityTownVillage))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (occupation == null) {
+			if (other.occupation != null)
+				return false;
+		} else if (!occupation.equals(other.occupation))
+			return false;
+		if (postalCode == null) {
+			if (other.postalCode != null)
+				return false;
+		} else if (!postalCode.equals(other.postalCode))
+			return false;
+		if (province == null) {
+			if (other.province != null)
+				return false;
+		} else if (!province.equals(other.province))
+			return false;
+		if (stateAreaDistrict == null) {
+			if (other.stateAreaDistrict != null)
+				return false;
+		} else if (!stateAreaDistrict.equals(other.stateAreaDistrict))
+			return false;
+		if (streetName == null) {
+			if (other.streetName != null)
+				return false;
+		} else if (!streetName.equals(other.streetName))
+			return false;
+		return true;
+	}
 	
 
 }

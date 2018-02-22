@@ -60,11 +60,8 @@ import fr.epita.logger.Logger;
  * </pre>
  * </p>
  *
- * @since $${version}
- * @see See also $${link}
- * @author ${user}
- *
- *         ${tags}
+ * @since 2018/02/18 version1.1
+ * @author ADEBOWALE
  */
 public class IdentityJDBCDAO implements IdentityDAO {
 

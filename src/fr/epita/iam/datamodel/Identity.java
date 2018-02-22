@@ -52,9 +52,6 @@ public class Identity extends Person{
 	public Identity() {
 
 	}
-	
-	
-
 	/**
 	 * Second constructor with all the attributes of Identity object
 	 * @param displayName

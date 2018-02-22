@@ -8,7 +8,7 @@ import fr.epita.iam.datamodel.Address;
 
 /**
  * @author ADEBOWALE
- *@ AddressDataException allow to inherit all methods of class Exception
+ * AddressDataException allow to inherit all methods of class Exception
  */
 public class AddressDataException extends Exception{
 	
